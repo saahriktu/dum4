@@ -1,4 +1,14 @@
+ifeq ($(prefix),)
+	prefix=/usr/local
+endif
+ifeq ($(shell which $(CXX)),)
+	CXX=g++
+endif
 all:
-	g++ -o dum4 dum4.cpp
+	$(CXX) $(CXXFLAGS) -o dum4 dum4.cpp
+	strip -S dum4
 install:
-	cp dum4 /usr/games/
+	if [ ! -d "$(DESTDIR)$(prefix)/games" ]; then mkdir -p $(DESTDIR)$(prefix)/games; fi
+	install -m755 dum4 $(DESTDIR)$(prefix)/games
+clean:
+	rm dum4
